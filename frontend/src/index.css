@@ -15,4 +15,5 @@ code {
 .leaflet-container {
   overflow: hidden;
   min-height: 500px;
+  height: 100vh;
 }

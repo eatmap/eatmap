@@ -6,6 +6,8 @@ import {
   Input,
   Flex,
   Spacer,
+  InputRightAddon,
+  InputGroup,
 } from '@chakra-ui/react';
 import { useContext } from 'react';
 import { getRestaurants } from '../../actions/restaurants';
@@ -26,6 +28,7 @@ function SearchForm() {
 
   const onClick = () => {
     setLoading(true);
+    setRestaurants([]);
     getRestaurants(longitude, latitude, radius)
       .then((restaurants) => setRestaurants(restaurants))
       .finally(() => setLoading(false));
@@ -33,15 +36,15 @@ function SearchForm() {
 
   return (
     <Box>
-      <Flex flexDirection={['column', null, 'row']} justify="end">
+      <Flex flexDirection={['column', null, 'row']}>
         <FormControl
           id="latitude"
-          maxW={['auto', null, 225]}
+          maxW={['auto', null, 150]}
           margin="auto"
           mb={5}
           isDisabled={loading}
         >
-          <FormLabel textAlign="center">Latitude</FormLabel>
+          <FormLabel>Latitude</FormLabel>
           <Input
             type="number"
             value={latitude}
@@ -53,37 +56,42 @@ function SearchForm() {
 
         <FormControl
           id="longitude"
-          maxW={['auto', null, 225]}
+          maxW={['auto', null, 150]}
           margin="auto"
           mb={5}
           isDisabled={loading}
         >
-          <FormLabel textAlign="center">Longitude</FormLabel>
+          <FormLabel>Longitude</FormLabel>
           <Input
             type="number"
             value={longitude}
             onChange={(x) => setLongitude(Number(x.target.value))}
           />
         </FormControl>
+
+        <Spacer />
+
+        <FormControl
+          id="radius"
+          maxW={['auto', null, 150]}
+          margin="auto"
+          mb={5}
+          isDisabled={loading}
+        >
+          <FormLabel>Search radius</FormLabel>
+          <InputGroup>
+            <Input
+              type="number"
+              value={radius}
+              onChange={(x) => setRadius(Number(x.target.value))}
+            />
+            <InputRightAddon children="km" />
+          </InputGroup>
+        </FormControl>
       </Flex>
 
-      <FormControl
-        id="radius"
-        maxW={['auto', null, 225]}
-        margin="auto"
-        mb={5}
-        isDisabled={loading}
-      >
-        <FormLabel textAlign="center">Search radius (in km)</FormLabel>
-        <Input
-          type="number"
-          value={radius}
-          onChange={(x) => setRadius(Number(x.target.value))}
-        />
-      </FormControl>
-
       <Button size="lg" isFullWidth isLoading={loading} onClick={onClick}>
-        Find Places
+        Find Restaurants
       </Button>
     </Box>
   );
