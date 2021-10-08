@@ -1,4 +1,4 @@
-package cs3300.group4.eatmap;
+package cs3300.group4.eatmap.controllers;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
