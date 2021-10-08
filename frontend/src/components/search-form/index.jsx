@@ -7,17 +7,29 @@ import {
   Flex,
   Spacer,
 } from '@chakra-ui/react';
-import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useContext } from 'react';
+import { getRestaurants } from '../../actions/restaurants';
+import { RestaurantSearchContext } from '../../providers/RestaurantsContext';
 
-function SearchForm({ loading, onSubmit }) {
-  const [latitude, setLatitude] = useState(33.7756);
-  const [longitude, setLongitude] = useState(84.3963);
-  const [radius, setRadius] = useState(5);
+function SearchForm() {
+  const {
+    longitude,
+    latitude,
+    radius,
+    loading,
+    setLatitude,
+    setLongitude,
+    setRadius,
+    setLoading,
+    setRestaurants,
+  } = useContext(RestaurantSearchContext);
 
-  const findPlaces = () => {
+  const onClick = () => {
     // TODO: Validate user input
-    onSubmit(latitude, longitude, radius);
+    setLoading(true);
+    getRestaurants(longitude, latitude, radius)
+      .then((restaurants) => setRestaurants(restaurants))
+      .finally(() => setLoading(false));
   };
 
   return (
@@ -71,16 +83,11 @@ function SearchForm({ loading, onSubmit }) {
         />
       </FormControl>
 
-      <Button size="lg" isFullWidth isLoading={loading} onClick={findPlaces}>
+      <Button size="lg" isFullWidth isLoading={loading} onClick={onClick}>
         Find Places
       </Button>
     </Box>
   );
 }
-
-SearchForm.propTypes = {
-  loading: PropTypes.bool,
-  onSubmit: PropTypes.func,
-};
 
 export default SearchForm;
