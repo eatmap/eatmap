@@ -1,14 +1,14 @@
 import { Container, Heading, Divider, Box, SimpleGrid } from '@chakra-ui/react';
-import RestaurantMap from '../components/restaurant-map';
 import RestaurantList from '../components/restaurant-list';
 import SearchForm from '../components/search-form';
 import { RestaurantSearchProvider } from '../providers/RestaurantsContext';
+import MyMapComponent from '../components/Map';
 
 function SearchPage() {
   return (
     <RestaurantSearchProvider
-      defaultLatitude={33.7756}
-      defaultLongitude={84.3963}
+      defaultLatitude={33.74899}
+      defaultLongitude={-84.38798}
       defaultRadius={5}
     >
       <Box>
@@ -22,7 +22,7 @@ function SearchPage() {
         <Divider mt={5} />
         <SimpleGrid columns={[1, null, 2]}>
           <RestaurantList />
-          <RestaurantMap restaurants={[]} />
+          <MyMapComponent />
         </SimpleGrid>
       </Box>
     </RestaurantSearchProvider>
