@@ -15,7 +15,7 @@ function MyMapComponent() {
   const center = [latitude, longitude];
 
   return (
-    <MapContainer center={center} zoom={13} scrollWheelZoom={true}>
+    <MapContainer center={center} zoom={14} scrollWheelZoom={true}>
       <ChangeCenterView center={center} />
       <TileLayer
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
