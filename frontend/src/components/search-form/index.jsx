@@ -48,7 +48,7 @@ function SearchForm() {
           <Input
             type="number"
             value={latitude}
-            onChange={(x) => setLatitude(Number(x.target.value))}
+            onChange={(x) => setLatitude(x.target.value)}
           />
         </FormControl>
 
@@ -65,7 +65,7 @@ function SearchForm() {
           <Input
             type="number"
             value={longitude}
-            onChange={(x) => setLongitude(Number(x.target.value))}
+            onChange={(x) => setLongitude(x.target.value)}
           />
         </FormControl>
 
@@ -83,7 +83,7 @@ function SearchForm() {
             <Input
               type="number"
               value={radius}
-              onChange={(x) => setRadius(Number(x.target.value))}
+              onChange={(x) => setRadius(x.target.value)}
             />
             <InputRightAddon children="km" />
           </InputGroup>
