@@ -20,15 +20,15 @@ function RatingStars({ rating }) {
 
   const stars = [];
   for (let i = 0; i < Math.floor(rating); i++) {
-    stars.push(<VscStarFull color="gold" />);
+    stars.push(<VscStarFull color="gold" key={i} />);
   }
 
   if (hasHalfStar) {
-    stars.push(<VscStarHalf color="gold" />);
+    stars.push(<VscStarHalf color="gold" key="half" />);
   }
 
   while (stars.length !== 5) {
-    stars.push(<VscStarFull color="gray" />);
+    stars.push(<VscStarFull color="gray" key={stars.length} />);
   }
 
   return (
@@ -83,7 +83,7 @@ function RestaurantCard({ name, address, rating, id }) {
 RestaurantCard.propTypes = {
   name: PropTypes.string.isRequired,
   address: PropTypes.string.isRequired,
-  rating: PropTypes.string.isRequired,
+  rating: PropTypes.number.isRequired,
   id: PropTypes.string.isRequired,
 };
 
