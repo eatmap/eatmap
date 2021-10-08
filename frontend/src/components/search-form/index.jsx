@@ -25,7 +25,6 @@ function SearchForm() {
   } = useContext(RestaurantSearchContext);
 
   const onClick = () => {
-    // TODO: Validate user input
     setLoading(true);
     getRestaurants(longitude, latitude, radius)
       .then((restaurants) => setRestaurants(restaurants))
@@ -46,7 +45,7 @@ function SearchForm() {
           <Input
             type="number"
             value={latitude}
-            onChange={(x) => setLatitude(x.target.value)}
+            onChange={(x) => setLatitude(Number(x.target.value))}
           />
         </FormControl>
 
@@ -63,7 +62,7 @@ function SearchForm() {
           <Input
             type="number"
             value={longitude}
-            onChange={(x) => setLongitude(x.target.value)}
+            onChange={(x) => setLongitude(Number(x.target.value))}
           />
         </FormControl>
       </Flex>
@@ -79,7 +78,7 @@ function SearchForm() {
         <Input
           type="number"
           value={radius}
-          onChange={(x) => setRadius(x.target.value)}
+          onChange={(x) => setRadius(Number(x.target.value))}
         />
       </FormControl>
 
