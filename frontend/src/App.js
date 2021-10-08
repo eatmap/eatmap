@@ -6,8 +6,6 @@ import ProtectedRoute from './components/protected-route';
 import NoFoundPage from './pages/404';
 import SearchPage from './pages/search';
 
-import 'leaflet/dist/leaflet.css';
-
 function App() {
   return (
     <ChakraProvider>
