@@ -1,37 +1,37 @@
-import { Container, Heading, Divider, Box, SimpleGrid } from '@chakra-ui/react';
-import { useState } from 'react';
-import RestaurantMap from '../components/restaurant-map';
+import { Text, Heading, Divider, Box, Grid } from '@chakra-ui/react';
 import RestaurantList from '../components/restaurant-list';
 import SearchForm from '../components/search-form';
+import { RestaurantSearchProvider } from '../providers/RestaurantsContext';
+import MyMapComponent from '../components/Map';
 
 function SearchPage() {
-  const [loading, setLoading] = useState(false);
-  const [restaurants, setRestaurants] = useState([]);
-
-  const findRestaurants = (latitude, longitude, radius) => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      console.log(latitude, longitude, radius);
-      setRestaurants([]);
-    }, 3000);
-  };
-
   return (
-    <Box>
-      <Container>
-        <Heading textAlign="center" my={5}>
-          Eat<span style={{ color: 'red' }}>Map</span>
-        </Heading>
-        <Divider my={5} />
-        <SearchForm onSubmit={findRestaurants} loading={loading} />
-      </Container>
-      <Divider mt={5} />
-      <SimpleGrid columns={[1, null, 2]}>
-				<RestaurantList />
-        <RestaurantMap restaurants={restaurants} />
-      </SimpleGrid>
-    </Box>
+    <RestaurantSearchProvider
+      defaultLatitude={33.74899}
+      defaultLongitude={-84.38798}
+      defaultRadius={5}
+    >
+      <Box>
+        <Grid templateColumns={{ base: '1fr', lg: '650px 1fr' }}>
+          <Box px={5}>
+            <Heading textAlign="center" my={5}>
+              Eat<span style={{ color: 'red' }}>Map</span>
+            </Heading>
+            <Heading as="h2" size="sm" textAlign="center">
+              Select a Search Area
+            </Heading>
+            <Divider my={3} />
+
+            <SearchForm />
+
+            <Divider mt={5} />
+
+            <RestaurantList />
+          </Box>
+          <MyMapComponent />
+        </Grid>
+      </Box>
+    </RestaurantSearchProvider>
   );
 }
 

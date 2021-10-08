@@ -6,31 +6,45 @@ import {
   Input,
   Flex,
   Spacer,
+  InputRightAddon,
+  InputGroup,
 } from '@chakra-ui/react';
-import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useContext } from 'react';
+import { getRestaurants } from '../../actions/restaurants';
+import { RestaurantSearchContext } from '../../providers/RestaurantsContext';
 
-function SearchForm({ loading, onSubmit }) {
-  const [latitude, setLatitude] = useState(33.7756);
-  const [longitude, setLongitude] = useState(84.3963);
-  const [radius, setRadius] = useState(5);
+function SearchForm() {
+  const {
+    longitude,
+    latitude,
+    radius,
+    loading,
+    setLatitude,
+    setLongitude,
+    setRadius,
+    setLoading,
+    setRestaurants,
+  } = useContext(RestaurantSearchContext);
 
-  const findPlaces = () => {
-    // TODO: Validate user input
-    onSubmit(latitude, longitude, radius);
+  const onClick = () => {
+    setLoading(true);
+    setRestaurants([]);
+    getRestaurants(longitude, latitude, radius)
+      .then((restaurants) => setRestaurants(restaurants))
+      .finally(() => setLoading(false));
   };
 
   return (
     <Box>
-      <Flex flexDirection={['column', null, 'row']} justify="end">
+      <Flex flexDirection={['column', null, 'row']}>
         <FormControl
           id="latitude"
-          maxW={['auto', null, 225]}
+          maxW={['auto', null, 150]}
           margin="auto"
           mb={5}
           isDisabled={loading}
         >
-          <FormLabel textAlign="center">Latitude</FormLabel>
+          <FormLabel>Latitude</FormLabel>
           <Input
             type="number"
             value={latitude}
@@ -42,45 +56,45 @@ function SearchForm({ loading, onSubmit }) {
 
         <FormControl
           id="longitude"
-          maxW={['auto', null, 225]}
+          maxW={['auto', null, 150]}
           margin="auto"
           mb={5}
           isDisabled={loading}
         >
-          <FormLabel textAlign="center">Longitude</FormLabel>
+          <FormLabel>Longitude</FormLabel>
           <Input
             type="number"
             value={longitude}
             onChange={(x) => setLongitude(x.target.value)}
           />
         </FormControl>
+
+        <Spacer />
+
+        <FormControl
+          id="radius"
+          maxW={['auto', null, 150]}
+          margin="auto"
+          mb={5}
+          isDisabled={loading}
+        >
+          <FormLabel>Search radius</FormLabel>
+          <InputGroup>
+            <Input
+              type="number"
+              value={radius}
+              onChange={(x) => setRadius(x.target.value)}
+            />
+            <InputRightAddon children="km" />
+          </InputGroup>
+        </FormControl>
       </Flex>
 
-      <FormControl
-        id="radius"
-        maxW={['auto', null, 225]}
-        margin="auto"
-        mb={5}
-        isDisabled={loading}
-      >
-        <FormLabel textAlign="center">Search radius (in km)</FormLabel>
-        <Input
-          type="number"
-          value={radius}
-          onChange={(x) => setRadius(x.target.value)}
-        />
-      </FormControl>
-
-      <Button size="lg" isFullWidth isLoading={loading} onClick={findPlaces}>
-        Find Places
+      <Button size="lg" isFullWidth isLoading={loading} onClick={onClick}>
+        Find Restaurants
       </Button>
     </Box>
   );
 }
-
-SearchForm.propTypes = {
-  loading: PropTypes.bool,
-  onSubmit: PropTypes.func,
-};
 
 export default SearchForm;
