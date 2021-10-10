@@ -6,7 +6,6 @@ import {
   Popup,
   Circle,
 } from 'react-leaflet';
-import { Icon } from 'leaflet';
 import { useContext } from 'react';
 
 import { RestaurantSearchContext } from '../providers/RestaurantsContext';
@@ -23,15 +22,6 @@ function MyMapComponent() {
   );
 
   const center = [latitude, longitude];
-
-  const LeafIcon = Icon.extend({
-    options: {},
-  });
-
-  const RedIcon = new LeafIcon({
-    iconUrl:
-      'https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|2ecc71&chf=a,s,ee00FFFF',
-  });
 
   const markers = restaurants.map(({ id, name, location }) => {
     const { lat, lng } = location;
@@ -50,11 +40,6 @@ function MyMapComponent() {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       {markers}
-      {latitude && longitude && (
-        <Marker position={center} icon={RedIcon}>
-          <Popup>Search Location</Popup>
-        </Marker>
-      )}
       <Circle
         center={center}
         pathOptions={{ fillColor: 'red', fillOpacity: 0.1, stroke: false }}
