@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class HomeController {
 
-    @RequestMapping(value="/")
+    @RequestMapping(value = { "/", "/{x:[\\w\\-]+}", "/{x:^(?!api$).*$}/**/{y:[\\w\\-]+}" })
     public String index() {
         return "index";
     }

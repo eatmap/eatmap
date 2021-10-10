@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TestController {
 
-    @GetMapping("/isup")
+    @GetMapping("/api/isup")
     public String isUp() {
         return "Application is running";
     }
