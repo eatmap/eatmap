@@ -54,7 +54,7 @@ function RestaurantList() {
   // No restaurant to display
   if (filteredRestaurants.length === 0 || loading) {
     return (
-      <Box minH="300px" position="relative">
+      <Box minH="400px" position="relative" py="2">
         {SearchFilter}
         <Box
           position="absolute"
@@ -86,7 +86,7 @@ function RestaurantList() {
   }
 
   return (
-    <Box overflowY="scroll" overflowX="hidden" maxH="65vh">
+    <Box overflowY="scroll" overflowX="hidden" maxH="60vh">
       {SearchFilter}
       {filteredRestaurants.map(({ name, address, id, rating }) => {
         return (

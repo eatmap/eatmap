@@ -42,7 +42,7 @@ function MyMapComponent() {
       {markers}
       <Circle
         center={center}
-        pathOptions={{ fillColor: 'red', fillOpacity: 0.1, stroke: false }}
+        pathOptions={{ fillColor: 'red', fillOpacity: 0.25, stroke: false }}
         radius={radius * 1000}
       />
     </MapContainer>
