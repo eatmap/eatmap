@@ -39,6 +39,10 @@ function MyMapComponent() {
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
+      {/* <TileLayer
+        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        url="http://mt0.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"
+      /> */}
       {markers}
       <Circle
         center={center}
