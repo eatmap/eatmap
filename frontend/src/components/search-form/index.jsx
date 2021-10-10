@@ -90,7 +90,13 @@ function SearchForm() {
         </FormControl>
       </Flex>
 
-      <Button size="lg" isFullWidth isLoading={loading} onClick={onClick}>
+      <Button
+        size="lg"
+        isFullWidth
+        isLoading={loading}
+        onClick={onClick}
+        colorScheme="red"
+      >
         Find Restaurants
       </Button>
     </Box>
