@@ -83,10 +83,10 @@ export default function LoginForm() {
         mt={4}
         justifyContent="space-between"
       >
-        <Button colorScheme="teal" isLoading={isSubmitting} type="submit">
+        <Button colorScheme="red" isLoading={isSubmitting} type="submit">
           Submit
         </Button>
-        <Link as={RouterLink} color="teal" to="/login">
+        <Link as={RouterLink} color="red" to="/login">
           Already a user?
         </Link>
       </Box>
