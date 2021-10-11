@@ -4,6 +4,7 @@ import SearchForm from '../components/search-form';
 import { RestaurantSearchProvider } from '../providers/RestaurantsContext';
 import MyMapComponent from '../components/Map';
 import GeoLocation from '../components/geolocation';
+import HeaderText from '../components/HeaderText';
 
 function SearchPage() {
   return (
@@ -16,9 +17,7 @@ function SearchPage() {
         <Grid templateColumns={{ base: '1fr', lg: '650px 1fr' }}>
           <Box>
             <Box px={5}>
-              <Heading textAlign="center" my={5}>
-                Eat<span style={{ color: 'red' }}>Map</span>
-              </Heading>
+              <HeaderText />
               <Heading as="h2" size="sm" textAlign="center">
                 Select a Search Area
               </Heading>
