@@ -29,6 +29,7 @@ export default function LoginForm() {
 
     const response = await fetch("/api/login?username=" + values.username + "&password=" + values.password, requestOptions);
     const body = await response.json();
+    console.log(response.json());
     return new Promise((resolve) => {
       setTimeout(() => {
             alert(JSON.stringify(body, null));

@@ -1,6 +1,6 @@
 package cs3300.group4.eatmap.controllers;
 
-import cs3300.group4.eatmap.authentication.User;
+import cs3300.group4.eatmap.authentication.Datastore;
 import org.springframework.web.bind.annotation.*;
 import org.json.simple.JSONObject;
 
@@ -21,7 +21,12 @@ public class TestController {
         obj.put("username", username);
         obj.put("password", password);
         System.out.println("Login request.");
-        User.someMethod(username, password);
+        Datastore.someMethod(username, password);
         return obj;
+    }
+
+    @PutMapping("/api/register")
+    public JSONObject requestRegister(@RequestParam String username, @RequestParam String password) {
+        //TODO: Check if the username already exists
     }
 }
