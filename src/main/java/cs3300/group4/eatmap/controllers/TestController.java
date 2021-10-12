@@ -21,7 +21,7 @@ public class TestController {
         obj.put("username", username);
         obj.put("password", password);
         System.out.println("Login request.");
-        User.someMethod();
+        User.someMethod(username, password);
         return obj;
     }
 }

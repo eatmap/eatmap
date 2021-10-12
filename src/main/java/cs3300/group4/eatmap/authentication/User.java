@@ -13,16 +13,16 @@ import com.google.appengine.api.datastore.Entity;
 
 public class User {
 
-    public static void someMethod() {
+    public static void someMethod(String username, String password) {
 //        DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         Entity userEntity = new Entity("User");
 
 
-    userEntity.setProperty("username", "sofia");
-    userEntity.setProperty("password", "sofia");
+        userEntity.setProperty("username", username);
+        userEntity.setProperty("password", password);
 
-    datastore.put(userEntity);
+        datastore.put(userEntity);
 
 //    System.out.printf("Saved %s: %s%n", task.getKey().getName(), task.getString("description"));
 
