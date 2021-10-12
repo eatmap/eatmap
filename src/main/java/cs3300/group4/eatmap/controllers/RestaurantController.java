@@ -1,9 +1,9 @@
 package cs3300.group4.eatmap.controllers;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.maps.GeoApiContext;
 import com.google.maps.PlacesApi;
+import com.google.maps.errors.ApiException;
+import com.google.maps.errors.InvalidRequestException;
 import com.google.maps.model.LatLng;
 import com.google.maps.model.PlaceType;
 import com.google.maps.model.PlacesSearchResponse;
@@ -23,7 +23,9 @@ import java.util.Map;
 @RestController
 public class RestaurantController {
     @GetMapping("/api/places")
-    public String getRestaurants(@RequestParam("longitude") double longitude, @RequestParam("latitude") double latitude, @RequestParam("radius") double radius) {
+    public ResponseEntity<Map<String, Object>> getRestaurants(@RequestParam("longitude") double longitude, @RequestParam("latitude") double latitude, @RequestParam("radius") double radius) {
+        Map<String, Object> response = new HashMap<>();
+
         String GOOGLE_API_KEY = "AIzaSyCEuHkhMn7uIsw0nyCoktph4_PC7pX_H8k";
 
         GeoApiContext context = new GeoApiContext.Builder()
@@ -31,21 +33,25 @@ public class RestaurantController {
                 .build();
         try {
             // Get the request parameters
-            int searchRadius = (int) radius * 1000;
+            int searchRadius = (int) (radius * 1000);
             LatLng location = new LatLng(latitude, longitude);
 
             // Request Google Places API to get the nearby restaurants
-            PlacesSearchResponse response = PlacesApi.nearbySearchQuery(context,
+            PlacesSearchResponse apiResponse = PlacesApi.nearbySearchQuery(context,
                     location).radius(searchRadius).type(PlaceType.RESTAURANT).await();
 
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            return gson.toJson(response);
+            response.put("results", apiResponse.results);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (InvalidRequestException ex) {
+            System.out.println(ex.getMessage());
+            response.put("message", "The API request was malformed");
+            response.put("status", HttpStatus.INTERNAL_SERVER_ERROR.toString());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
-            Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("message", ex.getMessage());
-            errorResponse.put("status", HttpStatus.INTERNAL_SERVER_ERROR.toString());
-            return new GsonBuilder().create().toJson(new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR));
+            response.put("message", ex.getMessage());
+            response.put("status", HttpStatus.INTERNAL_SERVER_ERROR.toString());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
             // Invoke .shutdown() after your application is done making requests
             context.shutdown();

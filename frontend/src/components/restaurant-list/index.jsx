@@ -88,17 +88,21 @@ function RestaurantList() {
   return (
     <Box overflowY="scroll" overflowX="hidden" maxH="60vh">
       {SearchFilter}
-      {filteredRestaurants.map(({ name, address, id, rating }) => {
-        return (
-          <RestaurantCard
-            name={name}
-            address={address}
-            rating={rating}
-            key={id}
-            id={id}
-          />
-        );
-      })}
+      {filteredRestaurants.map(
+        ({ name, address, id, rating, photos, priceLevel }) => {
+          return (
+            <RestaurantCard
+              key={id}
+              name={name}
+              address={address}
+              rating={rating}
+              photos={photos}
+              priceLevel={priceLevel}
+              id={id}
+            />
+          );
+        },
+      )}
     </Box>
   );
 }

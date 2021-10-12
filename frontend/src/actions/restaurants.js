@@ -16,15 +16,27 @@ export async function getRestaurants(longitude, latitude, radius) {
   const responseMessage = await response.json();
 
   if (response.status === 200) {
+    console.log(responseMessage);
     return responseMessage.results.map((x) => {
-      const { name, geometry, rating, vicinity, placeId, photos } = x;
+      const { name, geometry, rating, vicinity, formattedAddress, placeId, photos } =
+        x;
+
+      let photoReferences = [];
+      try {
+        if (photos && Array.isArray(photos)) {
+          photoReferences = photos.map((photo) => photo.photoReference);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+
       return {
         id: placeId,
         name,
         location: geometry.location,
         rating,
-        address: vicinity,
-        photos,
+        address: formattedAddress || vicinity,
+        photos: photoReferences,
       };
     });
   }

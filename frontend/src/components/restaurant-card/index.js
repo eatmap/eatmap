@@ -8,38 +8,9 @@ import {
   Link,
 } from '@chakra-ui/react';
 
-import {
-  VscStarFull,
-  VscStarHalf,
-  VscLocation,
-  VscLinkExternal,
-} from 'react-icons/vsc';
-
-function RatingStars({ rating }) {
-  const hasHalfStar = Math.round(rating) === Math.floor(rating) + 1;
-
-  const stars = [];
-  for (let i = 0; i < Math.floor(rating); i++) {
-    stars.push(<VscStarFull color="gold" key={i} />);
-  }
-
-  if (hasHalfStar) {
-    stars.push(<VscStarHalf color="gold" key="half" />);
-  }
-
-  while (stars.length !== 5) {
-    stars.push(<VscStarFull color="gray" key={stars.length} />);
-  }
-
-  return (
-    <Box display="flex" alignItems="center" fontSize="lg" my="2">
-      <Text mr="2" fontSize="sm">
-        {rating}
-      </Text>{' '}
-      {stars}
-    </Box>
-  );
-}
+import { VscLocation, VscLinkExternal } from 'react-icons/vsc';
+import RatingStars from './ratings';
+import PhotoDisplay from './photo';
 
 function AddressDisplay({ address }) {
   return (
@@ -49,8 +20,7 @@ function AddressDisplay({ address }) {
     </SimpleGrid>
   );
 }
-
-function RestaurantCard({ name, address, rating, id }) {
+function RestaurantCard({ name, address, rating, id, photos }) {
   const googleMapsUrl = `https://www.google.com/maps/place/?q=place_id:${id}`;
   return (
     <Box
@@ -62,20 +32,28 @@ function RestaurantCard({ name, address, rating, id }) {
       bg="white"
       _hover={{ boxShadow: 'lg' }}
     >
-      <Heading fontSize="lg">{name}</Heading>
-      <Divider my="2" />
-      <RatingStars rating={rating} />
-      <AddressDisplay address={address} />
+      <SimpleGrid templateColumns="3fr 1fr" spacing="5">
+        <Box>
+          <Heading fontSize="lg">{name}</Heading>
+          <Divider my="2" />
+          <RatingStars rating={rating} />
+          <AddressDisplay address={address} />
 
-      <Link
-        href={googleMapsUrl}
-        isExternal
-        display="flex"
-        alignItems="center"
-        fontSize="sm"
-      >
-        <Text mr="1">View in Google</Text> <VscLinkExternal />
-      </Link>
+          <Link href={googleMapsUrl} isExternal fontSize="sm">
+            <Box display="flex" alignItems="center">
+              <Text mr="1">View in Google</Text> <VscLinkExternal />
+            </Box>
+          </Link>
+        </Box>
+        <Box
+          alignItems="center"
+          justifyContent="center"
+          display="flex"
+          flexDir="column"
+        >
+          <PhotoDisplay photos={photos} name={name} />
+        </Box>
+      </SimpleGrid>
     </Box>
   );
 }
@@ -85,6 +63,7 @@ RestaurantCard.propTypes = {
   address: PropTypes.string.isRequired,
   rating: PropTypes.number.isRequired,
   id: PropTypes.string.isRequired,
+  photos: PropTypes.array,
 };
 
 export default RestaurantCard;
