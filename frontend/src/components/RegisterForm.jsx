@@ -23,6 +23,7 @@ export default function LoginForm() {
 
   function onSubmit(values) {
     // TODO: connect with register API endpoint, redirect to /login if registration is successful
+    // A PUT REQUEST
     return new Promise((resolve) => {
       setTimeout(() => {
         alert(JSON.stringify(values, null, 2));

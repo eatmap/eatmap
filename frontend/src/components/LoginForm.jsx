@@ -18,13 +18,22 @@ export default function LoginForm() {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  function onSubmit(values) {
+  async function onSubmit(values) {
     // TODO: connect with login API endpoint, redirect to / if auth is successful
+
+    const requestOptions = {
+      method: 'POST'
+    };
+
+    console.log(values);
+
+    const response = await fetch("/api/login?username=" + values.username + "&password=" + values.password, requestOptions);
+    const body = await response.json();
     return new Promise((resolve) => {
       setTimeout(() => {
-        alert(JSON.stringify(values, null, 2));
-        resolve();
-      }, 3000);
+            alert(JSON.stringify(body, null));
+            resolve();
+          }, 3000);
     });
   }
 
