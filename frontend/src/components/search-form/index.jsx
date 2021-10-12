@@ -30,10 +30,8 @@ function SearchForm() {
     setLoading(true);
     setRestaurants([]);
     getRestaurants(longitude, latitude, radius)
-      .then((restaurants) => {
-        // restaurants.sort((a, b) => b.rating - a.rating);
-        setRestaurants(restaurants);
-      })
+      .then((restaurants) => setRestaurants(restaurants))
+      .catch((e) => alert(e))
       .finally(() => setLoading(false));
   };
 
