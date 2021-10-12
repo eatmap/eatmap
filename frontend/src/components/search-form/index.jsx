@@ -12,6 +12,7 @@ import {
 import { useContext } from 'react';
 import { getRestaurants } from '../../actions/restaurants';
 import { RestaurantSearchContext } from '../../providers/RestaurantsContext';
+import { showErrorMessage } from '../../utils/toast';
 
 function SearchForm() {
   const {
@@ -31,6 +32,7 @@ function SearchForm() {
     setRestaurants([]);
     getRestaurants(longitude, latitude, radius)
       .then((restaurants) => setRestaurants(restaurants))
+      .catch((e) => showErrorMessage(e.message))
       .finally(() => setLoading(false));
   };
 

@@ -2,6 +2,7 @@ import { Button } from '@chakra-ui/react';
 import { useContext } from 'react';
 import { RestaurantSearchContext } from '../../providers/RestaurantsContext';
 import { BiCurrentLocation } from 'react-icons/bi';
+import { showErrorMessage } from '../../utils/toast';
 
 function GeoLocation() {
   const { setLatitude, setLongitude } = useContext(RestaurantSearchContext);
@@ -16,14 +17,14 @@ function GeoLocation() {
         },
         (error) => {
           console.log(error);
-          alert(
+          showErrorMessage(
             error.message ||
               'Error finding the current location. Please try again later',
           );
         },
       );
     } else {
-      alert('Location access must be enabled to use this feature');
+      showErrorMessage('Location access must be enabled to use this feature');
     }
   };
 

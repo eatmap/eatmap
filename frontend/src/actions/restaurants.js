@@ -1,34 +1,37 @@
 export async function getRestaurants(longitude, latitude, radius) {
-  // TODO: Make API call to get restaurants
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      // From Google Places API example
-      var axios = require('axios');
+  // Validate the input values
+  if (isNaN(latitude)) {
+    throw Error('Please provide a valid value for latitude');
+  }
+  if (isNaN(longitude)) {
+    throw Error('Please provide a valid value for longitude');
+  }
+  if (isNaN(radius)) {
+    throw Error('Please provide a valid value for search radius');
+  }
 
-      var config = {
-        method: 'get',
-        url: 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' + latitude + '%2C' + longitude + '&radius=' + (radius * 1000) + '&type=restaurant&key=AIzaSyCEuHkhMn7uIsw0nyCoktph4_PC7pX_H8k',
-        headers: { }
+  const requestUrl = `/api/places?longitude=${longitude}&latitude=${latitude}&radius=${radius}`;
+
+  const response = await fetch(requestUrl);
+  const responseMessage = await response.json();
+
+  if (response.status === 200) {
+    return responseMessage.results.map((x) => {
+      const { name, geometry, rating, vicinity, placeId, photos } = x;
+      return {
+        id: placeId,
+        name,
+        location: geometry.location,
+        rating,
+        address: vicinity,
+        photos,
       };
+    });
+  }
 
-      axios(config)
-      .then(function (response) {
-        console.log(JSON.stringify(response.data));
-        const parsed_result = response.data.results.map((x) => {
-          const { name, geometry, rating, vicinity, place_id } = x;
-          return {
-            id: place_id,
-            name,
-            location: geometry.location,
-            rating,
-            address: vicinity,
-          };
-        });
-        resolve(parsed_result);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-    }, 3000);
-  });
+  const errorMessage =
+    responseMessage.message ||
+    'Failed to find nearby restaurants. Please try again later';
+
+  throw Error(errorMessage);
 }
