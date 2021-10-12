@@ -20,6 +20,9 @@ export default function LoginForm() {
 
   function onSubmit(values) {
     // TODO: connect with login API endpoint, redirect to / if auth is successful
+
+
+
     return new Promise((resolve) => {
       setTimeout(() => {
         alert(JSON.stringify(values, null, 2));
