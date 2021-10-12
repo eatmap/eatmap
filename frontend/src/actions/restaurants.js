@@ -16,7 +16,7 @@ export async function getRestaurants(longitude, latitude, radius) {
   const responseMessage = await response.json();
 
   if (response.status === 200) {
-    console.log(responseMessage);
+    // console.log(responseMessage);
     return responseMessage.results.map((x) => {
       const { name, geometry, rating, vicinity, formattedAddress, placeId, photos } =
         x;
