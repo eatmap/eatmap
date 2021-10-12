@@ -23,11 +23,20 @@ export default function LoginForm() {
 
   function onSubmit(values) {
     // TODO: connect with register API endpoint, redirect to /login if registration is successful
+    // TODO: connect with login API endpoint, redirect to / if auth is successful
+    
+    const requestOptions = {
+      method: 'PUT'
+    };
+
+    const response = await fetch("/api/register?username=" + values.username + "&password=" + values.password, requestOptions);
+    const body = await response.json();
+    console.log(response.json());
     return new Promise((resolve) => {
       setTimeout(() => {
-        alert(JSON.stringify(values, null, 2));
-        resolve();
-      }, 3000);
+            alert(JSON.stringify(body, null));
+            resolve();
+          }, 3000);
     });
   }
 
