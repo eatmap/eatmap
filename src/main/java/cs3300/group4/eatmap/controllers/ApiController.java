@@ -1,30 +1,32 @@
 package cs3300.group4.eatmap.controllers;
 
 import cs3300.group4.eatmap.authentication.Datastore;
-import org.springframework.web.bind.annotation.*;
+import cs3300.group4.eatmap.security.JwtAuth;
+import org.jose4j.lang.JoseException;
 import org.json.simple.JSONObject;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class ApiController {
 
-    @GetMapping("/api/isup")
-    public JSONObject isUp() {
-        JSONObject obj = new JSONObject();
-        obj.put("running", true);
-        System.out.println("Application is running.");
-        return obj;
-    }
-
     @PostMapping("/api/login")
-    public JSONObject requestLogin(@RequestParam String username, @RequestParam String password) {
+    public JSONObject requestLogin(@RequestParam String username, @RequestParam String password) throws JoseException {
         // Make call to dataStore class
-        boolean successfulLogin = Datastore.checkLogin(username, password);
+
+        // TODO: Uncomment line below and comment the "successfulLogin" line to use datastore.
+//        boolean successfulLogin = Datastore.checkLogin(username, password);
+        boolean successfulLogin = true;
 
         // Create JSON with specific objects.
         JSONObject json = new JSONObject();
         if (successfulLogin) {
             json.put("loggedIn", true);
             json.put("username", username);
+
+            JwtAuth jwtAuth = new JwtAuth();
+            String token = jwtAuth.getJwtToken(username);
+
+            json.put("token", token);
         } else {
             json.put("loggedIn", false);
         }
@@ -33,10 +35,11 @@ public class ApiController {
     }
 
     @PutMapping("/api/register")
-    public JSONObject requestRegister(@RequestParam String username, @RequestParam String password) {
-
+    public JSONObject requestRegister(@RequestParam String username, @RequestParam String password) throws JoseException {
         // Make call to dataStore class
-        boolean successfulRegistration = Datastore.registerNewUser(username, password);
+        // TODO: Uncomment line below and comment the "successfulLogin" line to use datastore.
+//        boolean successfulRegistration = Datastore.registerNewUser(username, password);
+        boolean successfulRegistration = true;
 
         // Create JSON with specific objects.
         JSONObject json = new JSONObject();
@@ -44,6 +47,13 @@ public class ApiController {
             json.put("registered", true);
             json.put("loggedIn", true);
             json.put("username", username);
+
+            // Token
+            JwtAuth jwtAuth = new JwtAuth();
+            String token = jwtAuth.getJwtToken(username);
+
+            json.put("token", token);
+
         } else {
             json.put("registered", false);
             json.put("loggedIn", false);
@@ -52,9 +62,16 @@ public class ApiController {
         return json;
     }
 
-    @GetMapping("/api/isAuthenticated")
-    public void isUserAuthenticated() {
-        //TODO: Change return to a JSON object.
-        //TODO: If the user is authenticated return a JSON with {authenticated: true} else with false.
+    @GetMapping("/api/validate")
+    public JSONObject validateToken(@RequestParam String token) {
+
+        // Validate token
+        JwtAuth jwtAuth = new JwtAuth();
+        boolean validToken = jwtAuth.checkValidJwtToken(token);
+
+        // Create json
+        JSONObject json = new JSONObject();
+        json.put("valid", validToken);
+        return json;
     }
 }

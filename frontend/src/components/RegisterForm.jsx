@@ -21,9 +21,9 @@ export default function LoginForm() {
   const password = useRef({});
   password.current = watch('password', '');
 
-  function onSubmit(values) {
-    // TODO: connect with register API endpoint, redirect to /login if registration is successful
-    // TODO: connect with login API endpoint, redirect to / if auth is successful
+  async function onSubmit(values) {
+    // TODO: redirect to / if registration is successful
+    // TODO: Use token
     
     const requestOptions = {
       method: 'PUT'

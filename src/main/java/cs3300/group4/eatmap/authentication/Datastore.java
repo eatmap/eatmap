@@ -1,17 +1,10 @@
 package cs3300.group4.eatmap.authentication;
 
-//import com.google.cloud.spring.data.datastore.core.mapping.Entity;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
-//import com.google.cloud.datastore.Datastore;
-//import com.google.cloud.datastore.DatastoreOptions;
-//import com.google.cloud.datastore.Key;
-//import org.springframework.data.annotation.Id;
-//import com.google.cloud.datastore.Entity;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.PreparedQuery;
-//import com.google.cloud.datastore.Entity;
 
 public class Datastore {
 
@@ -30,6 +23,7 @@ public class Datastore {
         // Hashed password
         int hashedPassword = (username + password).hashCode();
 
+        // Check for the user
         for (Entity entity : results.asIterable()) {
             if (entity.getProperty("Username").equals(username) && Integer.valueOf(entity.getProperty("Password").toString()) == hashedPassword) {
                 return true;
@@ -61,7 +55,7 @@ public class Datastore {
         userToAdd.setProperty("Username", username);
 
         int hashedPassword = (username + password).hashCode();
-        userToAdd.setProperty("Password", hashedPassword); //TODO: Add salting and hash to password
+        userToAdd.setProperty("Password", hashedPassword);
         ds.put(userToAdd);
 
         return true;
