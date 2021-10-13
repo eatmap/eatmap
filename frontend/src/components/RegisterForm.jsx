@@ -21,13 +21,22 @@ export default function LoginForm() {
   const password = useRef({});
   password.current = watch('password', '');
 
-  function onSubmit(values) {
-    // TODO: connect with register API endpoint, redirect to /login if registration is successful
+  async function onSubmit(values) {
+    // TODO: redirect to / if registration is successful
+    // TODO: Use token
+    
+    const requestOptions = {
+      method: 'PUT'
+    };
+
+    const response = await fetch("/api/register?username=" + values.username + "&password=" + values.password, requestOptions);
+    const body = await response.json();
+    console.log(response.json());
     return new Promise((resolve) => {
       setTimeout(() => {
-        alert(JSON.stringify(values, null, 2));
-        resolve();
-      }, 3000);
+            alert(JSON.stringify(body, null));
+            resolve();
+          }, 3000);
     });
   }
 
