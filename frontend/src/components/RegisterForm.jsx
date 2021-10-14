@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import React, { useRef } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
 import {
   Box,
   Link,
@@ -10,6 +10,9 @@ import {
   Input,
   Button,
 } from '@chakra-ui/react';
+
+import { register as registerUser } from '../actions/authentication';
+import { showErrorMessage, showSuccessMessage } from '../utils/toast';
 
 export default function LoginForm() {
   const {
@@ -21,23 +24,17 @@ export default function LoginForm() {
   const password = useRef({});
   password.current = watch('password', '');
 
-  async function onSubmit(values) {
-    // TODO: redirect to / if registration is successful
-    // TODO: Use token
-    
-    const requestOptions = {
-      method: 'PUT'
-    };
+  const history = useHistory();
 
-    const response = await fetch("/api/register?username=" + values.username + "&password=" + values.password, requestOptions);
-    const body = await response.json();
-    console.log(response.json());
-    return new Promise((resolve) => {
-      setTimeout(() => {
-            alert(JSON.stringify(body, null));
-            resolve();
-          }, 3000);
-    });
+  async function onSubmit(values) {
+    const { username, password } = values;
+    try {
+      await registerUser(username, password);      
+      showSuccessMessage('Registration was successful. Please log in');
+      history.push('/login');
+    } catch (e) {
+      showErrorMessage(e.message);
+    }
   }
 
   return (

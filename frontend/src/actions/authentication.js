@@ -23,6 +23,32 @@ export async function login(username, password) {
   throw Error(errorMessage);
 }
 
+// Register new user. Throw error is registration was unsuccessful
+export async function register(username, password) {
+  const payload = { username, password };
+
+  const response = await fetch('/api/register', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  const body = await response.json();
+
+  if (response.status === 200) {
+    if (body.registered) {
+      return;
+    }
+
+    throw Error('Failed to register. Please try again later');
+  }
+
+  const errorMessage = body.message || 'Failed to authenticate with the server';
+  throw Error(errorMessage);
+}
+
 // Test if the provided token is valid
 export async function validateJWT(token) {
   if (!token || token.trim().length === 0) {
