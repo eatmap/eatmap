@@ -1,3 +1,4 @@
+// Make API call to find restaurants for provided search inputs
 export async function getRestaurants(longitude, latitude, radius) {
   // Validate the input values
   if (isNaN(latitude)) {
@@ -18,9 +19,17 @@ export async function getRestaurants(longitude, latitude, radius) {
   if (response.status === 200) {
     // console.log(responseMessage);
     return responseMessage.results.map((x) => {
-      const { name, geometry, rating, vicinity, formattedAddress, placeId, photos } =
-        x;
+      const {
+        name,
+        geometry,
+        rating,
+        vicinity,
+        formattedAddress,
+        placeId,
+        photos,
+      } = x;
 
+      // Find photo references
       let photoReferences = [];
       try {
         if (photos && Array.isArray(photos)) {

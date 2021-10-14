@@ -12,3 +12,7 @@ const TOAST_OPTIONS = {
 export function showErrorMessage(message) {
   toast.error(message, TOAST_OPTIONS);
 }
+
+export function showSuccessMessage(message) {
+  toast.success(message, TOAST_OPTIONS);
+}
