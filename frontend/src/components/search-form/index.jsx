@@ -13,6 +13,7 @@ import { useContext } from 'react';
 import { getRestaurants } from '../../actions/restaurants';
 import { RestaurantSearchContext } from '../../providers/RestaurantsContext';
 import { showErrorMessage } from '../../utils/toast';
+import { getJWT } from '../../utils/token';
 
 function SearchForm() {
   const {
@@ -30,7 +31,8 @@ function SearchForm() {
   const onClick = () => {
     setLoading(true);
     setRestaurants([]);
-    getRestaurants(longitude, latitude, radius)
+    const token = getJWT();
+    getRestaurants(longitude, latitude, radius, token)
       .then((restaurants) => setRestaurants(restaurants))
       .catch((e) => showErrorMessage(e.message))
       .finally(() => setLoading(false));
