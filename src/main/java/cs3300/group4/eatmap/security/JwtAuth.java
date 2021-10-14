@@ -23,7 +23,7 @@ public class JwtAuth {
         return Jwts.builder()
                 .setClaims(new HashMap<>()).setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 2 * 1000))
+                .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 60 * 60 * 1000))
                 .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
     }
