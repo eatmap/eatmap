@@ -26,3 +26,7 @@ export function saveJWT(token) {
 export function getJWT() {
     return localStorage.getItem(JWT_TOKEN_KEY) || "";
 }
+
+export function deleteJWT() {
+    localStorage.removeItem(JWT_TOKEN_KEY);
+}

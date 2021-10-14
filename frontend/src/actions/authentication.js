@@ -26,7 +26,7 @@ export async function login(username, password) {
 // Test if the provided token is valid
 export async function validateJWT(token) {
   if (!token || token.trim().length === 0) {
-    throw Error('Please login to use the app');
+    throw Error('Please login to use the application');
   }
 
   const response = await fetch(`/api/validate?token=${token}`);
@@ -37,7 +37,7 @@ export async function validateJWT(token) {
     if (body.valid) {
       return;
     }
-    throw Error('Please login to use the app');
+    throw Error('Please login to use the application');
   }
 
   // Some unexpected error occured on server side
