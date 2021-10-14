@@ -1,5 +1,6 @@
 package cs3300.group4.eatmap.controllers;
 
+import cs3300.group4.eatmap.authentication.Datastore;
 import cs3300.group4.eatmap.authentication.UserCredentials;
 import cs3300.group4.eatmap.security.JwtAuth;
 import org.json.simple.JSONObject;
@@ -17,9 +18,8 @@ public class ApiController {
             String password = login.getPassword();
 
             // Make call to dataStore class
-            // TODO: Uncomment line below and comment the "successfulLogin" line to use datastore.
-//        boolean successfulLogin = Datastore.checkLogin(username, password);
-            boolean successfulLogin = true;
+            boolean successfulLogin = Datastore.checkLogin(username, password);
+            // boolean successfulLogin = true; // USE FOR TESTING LOCALLY
 
             // Create JSON with specific objects.
             if (successfulLogin) {
@@ -63,9 +63,8 @@ public class ApiController {
             String password = credentials.getPassword();
 
             // Make call to dataStore class
-            // TODO: Uncomment line below and comment the "successfulLogin" line to use datastore.
-//        boolean successfulRegistration = Datastore.registerNewUser(username, password);
-            boolean successfulRegistration = true;
+            boolean successfulRegistration = Datastore.registerNewUser(username, password);
+            // boolean successfulRegistration = true; // USE FOR TESTING
 
             // Create JSON with specific objects.
 
