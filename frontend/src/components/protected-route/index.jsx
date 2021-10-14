@@ -6,6 +6,7 @@ import { validateJWT } from '../../actions/authentication';
 import { showErrorMessage } from '../../utils/toast';
 import Preloader from '../Preloader';
 
+// If user is not authenticated, prevent them from accessing the route
 function ProtectedRoute({ component: Component, ...restOfProps }) {
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setAuthenticated] = useState(false);
@@ -15,7 +16,6 @@ function ProtectedRoute({ component: Component, ...restOfProps }) {
     validateJWT(token)
       .then(() => {
         setAuthenticated(true);
-        setLoading(false);
       })
       .catch((e) => {
         showErrorMessage(e.message);
