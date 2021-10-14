@@ -1,61 +1,45 @@
 package cs3300.group4.eatmap.security;
 
-import org.jose4j.jwa.AlgorithmConstraints;
-import org.jose4j.jwk.RsaJsonWebKey;
-import org.jose4j.jwk.RsaJwkGenerator;
-import org.jose4j.jws.AlgorithmIdentifiers;
-import org.jose4j.jws.JsonWebSignature;
-import org.jose4j.jwt.JwtClaims;
-import org.jose4j.jwt.consumer.InvalidJwtException;
-import org.jose4j.jwt.consumer.JwtConsumer;
-import org.jose4j.jwt.consumer.JwtConsumerBuilder;
-import org.jose4j.lang.JoseException;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.JwtException;
+
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.function.Function;
 
 public class JwtAuth {
 
-    private RsaJsonWebKey rsaJsonWebKey;
+    // Hours for how long a token is valid
+    public static final long JWT_TOKEN_VALIDITY = 6;
 
-    public String getJwtToken(String username) throws JoseException {
-        rsaJsonWebKey = RsaJwkGenerator.generateJwk(2048);
-        rsaJsonWebKey.setKeyId("k1");
+    // Key to sign JWT
+    private static final String secret = "HGwfpYahwMahQuZh0j2o8nFV3Y1z8VyK";
 
-        JwtClaims claims = new JwtClaims();
-        claims.setIssuer("Issuer");
-        claims.setAudience("Audience");
-        claims.setExpirationTimeMinutesInTheFuture(60);
-        claims.setGeneratedJwtId();
-        claims.setIssuedAtToNow();
-        claims.setNotBeforeMinutesInThePast(2);
-        claims.setSubject("subject");
-        claims.setClaim("username", username);
-        JsonWebSignature jws = new JsonWebSignature();
-        jws.setPayload(claims.toJson());
-        jws.setKey(rsaJsonWebKey.getPrivateKey());
-        jws.setKeyIdHeaderValue(rsaJsonWebKey.getKeyId());
-        jws.setAlgorithmHeaderValue(AlgorithmIdentifiers.RSA_USING_SHA256);
-        String jwt = jws.getCompactSerialization();
-        return jwt;
+
+    public String getJwtToken(String username) {
+        return Jwts.builder()
+                .setClaims(new HashMap<>()).setSubject(username)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 2 * 1000))
+                .signWith(SignatureAlgorithm.HS256, secret)
+                .compact();
+    }
+
+    public <T> T getClaimFromToken(String token, Function<Claims, T> resolver) throws JwtException {
+        final Claims claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+        return resolver.apply(claims);
     }
 
     public boolean checkValidJwtToken(String token) {
-        JwtConsumer jwtConsumer = new JwtConsumerBuilder()
-                .setRequireExpirationTime()
-                .setAllowedClockSkewInSeconds(30)
-                .setRequireSubject()
-                .setExpectedIssuer("Issuer")
-                .setExpectedAudience("Audience")
-                .setVerificationKey(rsaJsonWebKey.getKey())
-                .setJwsAlgorithmConstraints(
-                        AlgorithmConstraints.ConstraintType.PERMIT, AlgorithmIdentifiers.RSA_USING_SHA256)
-                .build();
-
         try {
-            //  Validate the JWT and process it to the Claims
-            JwtClaims jwtClaims = jwtConsumer.processToClaims(token);
-            return true;
-        } catch (InvalidJwtException e) {
-            // InvalidJwtException will be thrown, if the JWT failed processing or validation in anyway.
-            return false;
+            // Since no additional authorization is necessary, simply check if the token is not malformed and not expired
+            Date expirationDate = getClaimFromToken(token, Claims::getExpiration);
+            return !expirationDate.before(new Date());
+        } catch (JwtException ex) {
+            return false ;
         }
     }
 }

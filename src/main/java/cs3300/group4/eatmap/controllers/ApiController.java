@@ -2,7 +2,6 @@ package cs3300.group4.eatmap.controllers;
 
 import cs3300.group4.eatmap.authentication.UserCredentials;
 import cs3300.group4.eatmap.security.JwtAuth;
-import org.jose4j.lang.JoseException;
 import org.json.simple.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 public class ApiController {
 
     @PostMapping("/api/login")
-    public ResponseEntity<JSONObject> requestLogin(@RequestBody UserCredentials login) throws Exception {
+    public ResponseEntity<JSONObject> requestLogin(@RequestBody UserCredentials login) {
         try {
             String username = login.getUsername();
             String password = login.getPassword();
@@ -48,7 +47,7 @@ public class ApiController {
     }
 
     @PostMapping("/api/register")
-    public ResponseEntity<JSONObject> requestRegister(@RequestBody UserCredentials credentials) throws JoseException {
+    public ResponseEntity<JSONObject> requestRegister(@RequestBody UserCredentials credentials) {
         try {
             // Determine if the provided credentials are valid
             try {
@@ -103,7 +102,6 @@ public class ApiController {
             json.put("valid", validToken);
             return new ResponseEntity<>(json, HttpStatus.OK);
         } catch (Exception ex) {
-            // If no exception and was not a successful login, the credentials were incorrect
             JSONObject json = new JSONObject();
             json.put("message", ex.getMessage());
             return new ResponseEntity<>(json, HttpStatus.INTERNAL_SERVER_ERROR);
