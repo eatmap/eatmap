@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
 import {
   Box,
   Link,
@@ -11,6 +11,10 @@ import {
   Button,
 } from '@chakra-ui/react';
 
+import { login } from '../actions/authentication';
+import { showErrorMessage, showSuccessMessage } from '../utils/toast';
+import { saveJWT } from '../utils/token';
+
 export default function LoginForm() {
   const {
     handleSubmit,
@@ -18,25 +22,19 @@ export default function LoginForm() {
     formState: { errors, isSubmitting },
   } = useForm();
 
+  const history = useHistory();
+
   async function onSubmit(values) {
-    // TODO: redirect to / if auth is successful and use token
-    // TODO: use token
+    const { username, password } = values;
 
-    const requestOptions = {
-      method: 'POST'
-    };
-
-    const response = await fetch("/api/login?username=" + values.username + "&password=" + values.password, requestOptions);
-    const body = await response.json();
-    console.log(body);
-
-    return new Promise((resolve) => {
-      setTimeout(() => {
-            alert(JSON.stringify(body, null));
-            resolve();
-          }, 3000);
-    });
-    
+    try {
+      const token = await login(username, password);
+      saveJWT(token);
+      showSuccessMessage('Successfully logged in');
+      history.push('/');
+    } catch (e) {
+      showErrorMessage(e.message);
+    }
   }
 
   return (
