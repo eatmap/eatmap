@@ -1,6 +1,6 @@
 package cs3300.group4.eatmap.controllers;
 
-import cs3300.group4.eatmap.authentication.LoginForm;
+import cs3300.group4.eatmap.authentication.UserCredentials;
 import cs3300.group4.eatmap.security.JwtAuth;
 import org.jose4j.lang.JoseException;
 import org.json.simple.JSONObject;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 public class ApiController {
 
     @PostMapping("/api/login")
-    public ResponseEntity<JSONObject> requestLogin(@RequestBody LoginForm login) throws Exception {
+    public ResponseEntity<JSONObject> requestLogin(@RequestBody UserCredentials login) throws Exception {
         try {
             String username = login.getUsername();
             String password = login.getPassword();
@@ -23,8 +23,8 @@ public class ApiController {
             boolean successfulLogin = true;
 
             // Create JSON with specific objects.
-            JSONObject json = new JSONObject();
             if (successfulLogin) {
+                JSONObject json = new JSONObject();
                 json.put("loggedIn", true);
                 json.put("username", username);
 
@@ -33,6 +33,10 @@ public class ApiController {
 
                 json.put("token", token);
                 return new ResponseEntity<>(json, HttpStatus.OK);
+            } else {
+                JSONObject json = new JSONObject();
+                json.put("message", "Please provide a valid credentials");
+                return new ResponseEntity<>(json, HttpStatus.BAD_REQUEST);
             }
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
@@ -41,51 +45,68 @@ public class ApiController {
             json.put("status", HttpStatus.INTERNAL_SERVER_ERROR.toString());
             return new ResponseEntity<>(json, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-        // If no exception and was not a successful login, the credentials were incorrect
-        JSONObject json = new JSONObject();
-        json.put("message", "Please provide a valid credentials");
-        return new ResponseEntity<>(json, HttpStatus.BAD_REQUEST);
     }
 
-    @PutMapping("/api/register")
-    public JSONObject requestRegister(@RequestParam String username, @RequestParam String password) throws JoseException {
-        // Make call to dataStore class
-        // TODO: Uncomment line below and comment the "successfulLogin" line to use datastore.
+    @PostMapping("/api/register")
+    public ResponseEntity<JSONObject> requestRegister(@RequestBody UserCredentials credentials) throws JoseException {
+        try {
+            // Determine if the provided credentials are valid
+            try {
+                credentials.validateCredentials();
+            } catch (Exception ex) {
+                // If no exception and was not a successful login, the credentials were incorrect
+                JSONObject json = new JSONObject();
+                json.put("message", ex.getMessage());
+                return new ResponseEntity<>(json, HttpStatus.BAD_REQUEST);
+            }
+
+            String username = credentials.getUsername();
+            String password = credentials.getPassword();
+
+            // Make call to dataStore class
+            // TODO: Uncomment line below and comment the "successfulLogin" line to use datastore.
 //        boolean successfulRegistration = Datastore.registerNewUser(username, password);
-        boolean successfulRegistration = true;
+            boolean successfulRegistration = true;
 
-        // Create JSON with specific objects.
-        JSONObject json = new JSONObject();
-        if (successfulRegistration) {
-            json.put("registered", true);
-            json.put("loggedIn", true);
-            json.put("username", username);
+            // Create JSON with specific objects.
 
-            // Token
-            JwtAuth jwtAuth = new JwtAuth();
-            String token = jwtAuth.getJwtToken(username);
+            if (successfulRegistration) {
+                JSONObject json = new JSONObject();
+                json.put("registered", true);
+                return new ResponseEntity<>(json, HttpStatus.OK);
+            }
 
-            json.put("token", token);
-
-        } else {
-            json.put("registered", false);
-            json.put("loggedIn", false);
+            throw new Exception("Failed to register the new user");
+        } catch (Exception ex) {
+            JSONObject json = new JSONObject();
+            json.put("message", ex.getMessage());
+            json.put("status", HttpStatus.INTERNAL_SERVER_ERROR.toString());
+            return new ResponseEntity<>(json, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-        return json;
     }
 
     @GetMapping("/api/validate")
-    public JSONObject validateToken(@RequestParam String token) {
+    public ResponseEntity<JSONObject> validateToken(@RequestParam String token) {
+        if (token.trim().length() == 0) {
+            // No token was provided
+            JSONObject json = new JSONObject();
+            json.put("message", "Please provide a token");
+            return new ResponseEntity<>(json, HttpStatus.BAD_REQUEST);
+        }
 
-        // Validate token
-        JwtAuth jwtAuth = new JwtAuth();
-        boolean validToken = jwtAuth.checkValidJwtToken(token);
+        try {
+            // Validate token
+            JwtAuth jwtAuth = new JwtAuth();
+            boolean validToken = jwtAuth.checkValidJwtToken(token);
 
-        // Create json
-        JSONObject json = new JSONObject();
-        json.put("valid", validToken);
-        return json;
+            JSONObject json = new JSONObject();
+            json.put("valid", validToken);
+            return new ResponseEntity<>(json, HttpStatus.OK);
+        } catch (Exception ex) {
+            // If no exception and was not a successful login, the credentials were incorrect
+            JSONObject json = new JSONObject();
+            json.put("message", ex.getMessage());
+            return new ResponseEntity<>(json, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

@@ -1,6 +1,6 @@
 package cs3300.group4.eatmap.authentication;
 
-public class LoginForm {
+public class UserCredentials {
     public String getUsername() {
         return username;
     }
@@ -19,4 +19,14 @@ public class LoginForm {
 
     private String username;
     private String password;
+
+    public void validateCredentials() throws Exception {
+        if (this.username.trim().length() == 0) {
+            throw new Exception("Please provide a valid username");
+        }
+
+        if (this.password.trim().length() == 0) {
+            throw new Exception("Please provide a valid password");
+        }
+    }
 }
