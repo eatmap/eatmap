@@ -209,3 +209,21 @@ $ java -jar ./target/eatmap-0.0.1.jar
 ```
 
 This will run our complete web application on `https://localhost:8080`.
+
+## Deploying the application
+
+Ensure the correct project is set:
+```console
+$ gcloud config list project
+  [core]
+  project = my-project-123
+```
+If the correct project is not set, run the following command to specify the correct project id.
+```console
+$ gcloud config set project <project-id>
+```
+
+Run the following command to deploy the application to GCP App Engine.
+```console
+$ mvn -DskipTests package appengine:deploy
+```

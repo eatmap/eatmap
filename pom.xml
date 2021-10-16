@@ -111,6 +111,11 @@
 			<groupId>com.google.cloud</groupId>
 			<artifactId>google-cloud-datastore</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.google.cloud</groupId>
+			<artifactId>spring-cloud-gcp-starter-data-datastore</artifactId>
+			<version>2.0.0</version>
+		</dependency>
 
 		<!--JWT-->
 		<dependency>
@@ -142,6 +147,7 @@
 			<plugin>
 				<groupId>com.github.eirslett</groupId>
 				<artifactId>frontend-maven-plugin</artifactId>
+				<version>1.12.0</version>
 				<configuration>
 					<workingDirectory>frontend</workingDirectory>
 					<installDirectory>target</installDirectory>
@@ -197,6 +203,15 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>appengine-maven-plugin</artifactId>
+				<version>2.2.0</version>
+				<configuration>
+					<version>1</version>
+					<projectId>GCLOUD_CONFIG</projectId>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
