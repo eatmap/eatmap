@@ -1,6 +1,6 @@
 package cs3300.group4.eatmap.authentication;
 
-public class UserCredentials {
+public class User {
     public String getUsername() {
         return username;
     }

@@ -1,7 +1,8 @@
 package cs3300.group4.eatmap.controllers;
 
-import cs3300.group4.eatmap.authentication.Datastore;
-import cs3300.group4.eatmap.authentication.UserCredentials;
+import com.google.cloud.datastore.Entity;
+import cs3300.group4.eatmap.authentication.UserDatastore;
+import cs3300.group4.eatmap.authentication.User;
 import cs3300.group4.eatmap.security.JwtAuth;
 import org.json.simple.JSONObject;
 import org.springframework.http.HttpStatus;
@@ -12,13 +13,13 @@ import org.springframework.web.bind.annotation.*;
 public class ApiController {
 
     @PostMapping("/api/login")
-    public ResponseEntity<JSONObject> requestLogin(@RequestBody UserCredentials login) {
+    public ResponseEntity<JSONObject> requestLogin(@RequestBody User login) {
         try {
             String username = login.getUsername();
             String password = login.getPassword();
 
             // Make call to dataStore class
-            boolean successfulLogin = Datastore.checkLogin(username, password);
+            boolean successfulLogin = UserDatastore.checkLogin(username, password);
             // boolean successfulLogin = true; // USE FOR TESTING LOCALLY
 
             // Create JSON with specific objects.
@@ -47,7 +48,7 @@ public class ApiController {
     }
 
     @PostMapping("/api/register")
-    public ResponseEntity<JSONObject> requestRegister(@RequestBody UserCredentials credentials) {
+    public ResponseEntity<JSONObject> requestRegister(@RequestBody User credentials) {
         try {
             // Determine if the provided credentials are valid
             try {
@@ -62,8 +63,15 @@ public class ApiController {
             String username = credentials.getUsername();
             String password = credentials.getPassword();
 
+            Entity existingUser = UserDatastore.getExistingUser(username);
+            if (existingUser != null) {
+                JSONObject json = new JSONObject();
+                json.put("message", "Provided username already exists");
+                return new ResponseEntity<>(json, HttpStatus.BAD_REQUEST);
+            }
+
             // Make call to dataStore class
-            boolean successfulRegistration = Datastore.registerNewUser(username, password);
+            boolean successfulRegistration = UserDatastore.registerNewUser(username, password);
             // boolean successfulRegistration = true; // USE FOR TESTING
 
             // Create JSON with specific objects.

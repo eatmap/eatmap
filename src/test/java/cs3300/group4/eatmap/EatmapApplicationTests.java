@@ -1,7 +1,7 @@
 package cs3300.group4.eatmap;
 
 import com.google.appengine.api.datastore.*;
-import cs3300.group4.eatmap.authentication.Datastore;
+import cs3300.group4.eatmap.authentication.UserDatastore;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
@@ -45,7 +45,7 @@ class EatmapApplicationTests {
 		entity1.setProperty("Username", "Martin");
 		entity1.setProperty("Password", ("MartinMartin").hashCode());
 		Key key1 = ds.put(entity1);
-		assertEquals(true, Datastore.checkLogin("Martin", "Martin"));
+		assertEquals(true, UserDatastore.checkLogin("Martin", "Martin"));
 	}
 
 	/**
@@ -54,7 +54,7 @@ class EatmapApplicationTests {
 	 */
 	@Test
 	public void testCheckUnsuccessfulLoginEmptyDataStore() {
-		assertEquals(false, Datastore.checkLogin("Martin", "Martin"));
+		assertEquals(false, UserDatastore.checkLogin("Martin", "Martin"));
 	}
 
 	/**
@@ -68,7 +68,7 @@ class EatmapApplicationTests {
 		entity1.setProperty("Username", "Martin");
 		entity1.setProperty("Password", ("NotMartin").hashCode());
 		Key key1 = ds.put(entity1);
-		assertEquals(false, Datastore.checkLogin("Martin", "Martin"));
+		assertEquals(false, UserDatastore.checkLogin("Martin", "Martin"));
 	}
 
 	/**
@@ -76,7 +76,7 @@ class EatmapApplicationTests {
 	 */
 	@Test
 	public void testCheckSuccessfulRegistrationWithEmptyDataStore() {
-		assertEquals(true, Datastore.registerNewUser("Martin", "Martin"));
+		assertEquals(true, UserDatastore.registerNewUser("Martin", "Martin"));
 		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
 		Query query = new Query("User").setFilter(new Query.FilterPredicate("Username", Query.FilterOperator.EQUAL, "Martin"));
 		PreparedQuery results = ds.prepare(query);
@@ -104,7 +104,7 @@ class EatmapApplicationTests {
 		entity1.setProperty("Username", "Sofia");
 		entity1.setProperty("Password", "Sofia");
 
-		assertEquals(true, Datastore.registerNewUser("Martin", "Martin"));
+		assertEquals(true, UserDatastore.registerNewUser("Martin", "Martin"));
 		Query query = new Query("User").setFilter(new Query.FilterPredicate("Username", Query.FilterOperator.EQUAL, "Martin"));
 		PreparedQuery results = ds.prepare(query);
 
@@ -135,7 +135,7 @@ class EatmapApplicationTests {
 		entity1.setProperty("Password", "Martin");
 		ds.put(entity1);
 
-		assertEquals(false, Datastore.registerNewUser("Martin", "Martin"));
+		assertEquals(false, UserDatastore.registerNewUser("Martin", "Martin"));
 
 		// Check that there is still only 1 user named 'Martin'
 		Query query = new Query("User").setFilter(new Query.FilterPredicate("Username", Query.FilterOperator.EQUAL, "Martin"));
