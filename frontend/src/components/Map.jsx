@@ -5,6 +5,7 @@ import {
   Marker,
   Popup,
   Circle,
+  CircleMarker,
 } from 'react-leaflet';
 import { useContext } from 'react';
 
@@ -44,6 +45,13 @@ function MyMapComponent() {
         url="http://mt0.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"
       /> */}
       {markers}
+      <CircleMarker
+        center={center}
+        pathOptions={{ fillColor: 'blue', fillOpacity: 0.5, stroke: true }}
+        radius={5}
+      >
+        <Popup>Search Location</Popup>
+      </CircleMarker>
       <Circle
         center={center}
         pathOptions={{ fillColor: 'red', fillOpacity: 0.25, stroke: false }}
