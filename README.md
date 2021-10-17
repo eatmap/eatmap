@@ -6,7 +6,7 @@ CS 3300 - Team 4
 
 There are two main frameworks in our application:
 
-- Spring Boot: This is used fo our backend
+- Spring Boot: This is used for our backend
 - React: This is used for our frontend.
 
 ## Frontend
@@ -119,11 +119,12 @@ Maven is a command-line tool for building and managing any Java-based project. P
 
 </li>
 
-<li> <b>Google Cloud Datastore</b>
+<li id="gcp_datastore"> <b>Google Cloud Datastore</b>
 
 This project uses Google Cloud Datastore to save user credentials and use it for authentication purposes.
 
 If the application is being deployed to App Engine, simply enable the Google Cloud Datastore for the same project.
+
 
 If the application is being run locally, we can run an emulator locally.
 - Verify you have `gcloud` tool installed. If missing, you can download it from [here](https://cloud.google.com/sdk/docs/install)
@@ -169,6 +170,22 @@ If the application is being run locally, we can run an emulator locally.
   - Use appropriate command to set the environment variable for your platform. The above is an example for Linux/macOS environments only.
 
 For more instructions on setting up the emulator, see [here](https://cloud.google.com/datastore/docs/tools/datastore-emulator)
+
+</li>
+
+<li id="google_auth"> <b>Google Auth Library</b>
+
+Google Datastore requires access to Google Auth Library. To get the credentials, run the following command:
+``` console
+$ gcloud auth application-default login
+```
+This command generates a `application_default_credentials.json` file and stores it to a temporary location.
+
+If you prefer to create your own service account and use its credentials, see instructions [here](https://cloud.google.com/docs/authentication/production). <br />
+After downloading the credentials, set the environment variable `GOOGLE_APPLICATION_CREDENTIALS` which points to the full path to the credentials file:
+``` console
+$ export GOOGLE_APPLICATION_CREDENTIALS="path/to/service/account/credentials.json"
+```
 
 </li>
 
@@ -225,5 +242,24 @@ $ gcloud config set project <project-id>
 
 Run the following command to deploy the application to GCP App Engine.
 ```console
-$ mvn -DskipTests package appengine:deploy
+$ mvn package appengine:deploy
 ```
+
+If you want to deploy as a specific version:
+``` console
+$ mvn package appengine:deploy -Dapp.deploy.version=your-version-here
+```
+
+## Troubleshooting Guide
+
+- `IOException: The Application Default Credentials are not available` or `com.google.cloud.datastore.DatastoreException: Unauthenticated`
+
+  Since the application uses Google Datastore for storing user information, it searches for credentials. When running the application locally, the path to the credentials must be specified. To address this issue, complete the prerequisite - [Google Auth Library](#google_auth)
+
+- `com.google.cloud.datastore.DatastoreException: I/O error`
+
+  This is usually the case when the Datastore is not available. Note, connection to datastore is required for user login and registration. Similarly, it is required to run some tests.
+
+  To fix this issue, complete the prerequisite - [Google Cloud Datastore](#gcp_datastore).
+  - Ensure the emulator is running.
+  - Ensure the environment variables are set properly. Note the environment variable may not persist between different terminal sessions and may have to set again.
