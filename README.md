@@ -24,7 +24,7 @@ The project is structured as following:
   - [`authentication/`](src/main/java/cs3300/group4/eatmap/authentication): Contains code required for User authentication
   - [`controllers/`](src/main/java/cs3300/group4/eatmap/controllers): Contains controllers for the Spring Boot application
   - [`security/`](src/main/java/cs3300/group4/eatmap/security): Contains class for Password Hashing and JWT creation and validation.
-  - [`EatMapApplication.java`](src/main/java/cs3300/group4/eatmap/EatMapApplication.java): Main entrypoint for Spring Boot application.
+  - [`EatmapApplication.java`](src/main/java/cs3300/group4/eatmap/EatmapApplication.java): Main entrypoint for Spring Boot application.
 - [`src/main/resources`](src/main/resources): Contains static files and configuration files for Spring Boot applications
 - [`src/test/java/cs3300/group4/eatmap`](src/test/java/cs3300/group4/eatmap): Contains test files
 - [`mvnw`](mvnw): Wrapper for maven that allows users to run Maven project without having to install Maven.
