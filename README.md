@@ -288,3 +288,12 @@ Some common errors are:
   To fix this issue, complete the prerequisite - [Google Cloud Datastore](#gcp_datastore).
   - Ensure the emulator is running.
   - Ensure the environment variables are set properly. Note the environment variable may not persist between different terminal sessions and may have to set again.
+
+- Test Failing on installations
+
+  When running commands such as `mvn install` or `mvn clean install`, it runs tests by default. One of the test suite assumes the Google Cloud emulator is running and proper environment variables are set for it.
+
+  If you want to skip tests for dependencies installations and packaging, you can add `-DskipTests` flag
+  ``` console
+  $ mvn install -DskipTests
+  ```
