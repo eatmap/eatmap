@@ -1,15 +1,16 @@
 package cs3300.group4.eatmap.authentication;
 
-import com.google.cloud.datastore.*;
+import com.google.cloud.datastore.Datastore;
+import com.google.cloud.datastore.Entity;
+import com.google.cloud.datastore.Key;
+import com.google.cloud.datastore.KeyFactory;
 import cs3300.group4.eatmap.security.Hash;
 
-import javax.xml.stream.events.EndElement;
-import java.util.Objects;
 
 public class UserDatastore {
 
-    private static final String KIND = "User";
-    private static final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
+    public static final String KIND = "User";
+    private static final Datastore datastore = DatastoreFactory.getDatastore();
     private static final KeyFactory keyFactory = datastore.newKeyFactory().setKind(KIND);
 
     /**
@@ -50,6 +51,7 @@ public class UserDatastore {
 
         Key key = keyFactory.newKey(username);
         Entity entity = Entity.newBuilder(key)
+                .set("username", username)
                 .set("password", passwordHash)
                 .build();
 

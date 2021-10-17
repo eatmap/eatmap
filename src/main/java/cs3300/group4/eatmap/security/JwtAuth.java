@@ -1,10 +1,9 @@
 package cs3300.group4.eatmap.security;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.JwtException;
-
 
 import java.util.Date;
 import java.util.HashMap;
@@ -39,7 +38,7 @@ public class JwtAuth {
             Date expirationDate = getClaimFromToken(token, Claims::getExpiration);
             return !expirationDate.before(new Date());
         } catch (JwtException ex) {
-            return false ;
+            return false;
         }
     }
 }

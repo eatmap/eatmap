@@ -1,8 +1,8 @@
 package cs3300.group4.eatmap.controllers;
 
 import com.google.cloud.datastore.Entity;
-import cs3300.group4.eatmap.authentication.UserDatastore;
 import cs3300.group4.eatmap.authentication.User;
+import cs3300.group4.eatmap.authentication.UserDatastore;
 import cs3300.group4.eatmap.security.JwtAuth;
 import org.json.simple.JSONObject;
 import org.springframework.http.HttpStatus;
