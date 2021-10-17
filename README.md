@@ -2,14 +2,37 @@
 
 CS 3300 - Team 4
 
-## Dev Setup
-
+## Project Structure
 There are two main frameworks in our application:
 
 - Spring Boot: This is used for our backend
 - React: This is used for our frontend.
 
-## Frontend
+The project is structured as following:
+- [`frontend/`](frontend): Contains almost all of our front-end code. This is where we put our React components, styles, package manager, and static files. It has following important sub-folders and files:
+  - [`package.json`](frontend/package.json): Contains all the dependencies and commands to run and build React app.
+  - [`.prettierrc`](frontend/.prettierrc): Configuration file for Prettier to ensure same code style for the project.
+  - [`public`](frontend/public): Stores static files like icons, favicon, `robots.txt` and `manifest.json`.
+  - [`src/actions`](frontend/src/actions): Contains functions to make API calls to backend server
+  - [`src/components`](frontend/src/components): Contains reusable React components
+  - [`src/pages`](frontend/src/pages): Contains top-level page components
+  - [`src/providers`](frontend/src/providers): Contains React providers to share data among components
+  - [`src/utils`](frontend/src/utils): Contains miscellaneous helper codes
+
+- [`src/main/appengine`](src/main/appengine): Contains configuration file to deploy application to App Engine
+- [`src/main/java/cs3300/group4/eatmap`](src/main/java/cs3300/group4/eatmap): Contains most of our back-end code for Spring Boot application. It has following important subfolders and files:
+  - [`authentication/`](src/main/java/cs3300/group4/eatmap/authentication): Contains code required for User authentication
+  - [`controllers/`](src/main/java/cs3300/group4/eatmap/controllers): Contains controllers for the Spring Boot application
+  - [`security/`](src/main/java/cs3300/group4/eatmap/security): Contains class for Password Hashing and JWT creation and validation.
+  - [`EatMapApplication.java`](src/main/java/cs3300/group4/eatmap/EatMapApplication.java): Main entrypoint for Spring Boot application.
+- [`src/main/resources`](src/main/resources): Contains static files and configuration files for Spring Boot applications
+- [`src/test/java/cs3300/group4/eatmap`](src/test/java/cs3300/group4/eatmap): Contains test files
+- [`mvnw`](mvnw): Wrapper for maven that allows users to run Maven project without having to install Maven.
+- [`pom.xml`](pom.xml): Contains information about the project, required dependencies and configurations to build the project
+
+
+
+## Frontend Setup
 
 **Note:** The working directory for all of the frontend code is `./frontend`.
 ```console
@@ -78,7 +101,7 @@ $ npm run start
 
 By default, the application will be available on `https://localhost:3000`.
 
-## Backend
+## Backend Setup
 
 ### Pre-requisites
 
@@ -207,7 +230,7 @@ $ mvn spring-boot:run
 
 By default, the application will be available on `https://localhost:8080`. This will only contain backend endpoints.
 
-**NOTE:** Depending on the platform, if `mvn` fails, use `mvnw`
+**NOTE:** Depending on the platform, if `mvn` fails or not installed, use `mvnw`
 
 ## Packaging the application
 
@@ -217,7 +240,7 @@ Run the following command to install all the required dependencies and package f
 $ mvn clean install
 ```
 
-Note, this step also install `node` and `npm` for you. It will create a build for our React application and move it to the build path for Spring Boot application. A jar file will be created which contains both frontend and backend components.
+Note, this step also install `node` and `npm` for you. It will create a build for our React application and move it to the build path for Spring Boot application. A jar file will then be created which contains both frontend and backend components packaged together.
 
 To run the packaged application, run:
 
@@ -226,6 +249,8 @@ $ java -jar ./target/eatmap-0.0.1.jar
 ```
 
 This will run our complete web application on `https://localhost:8080`.
+
+**NOTE:** Remember to set required environment variables when starting the application. See [Troubleshooting Guide](#troubleshooting-guide) if you have issues running the application.
 
 ## Deploying the application
 
@@ -251,7 +276,7 @@ $ mvn package appengine:deploy -Dapp.deploy.version=your-version-here
 ```
 
 ## Troubleshooting Guide
-
+Some common errors are:
 - `IOException: The Application Default Credentials are not available` or `com.google.cloud.datastore.DatastoreException: Unauthenticated`
 
   Since the application uses Google Datastore for storing user information, it searches for credentials. When running the application locally, the path to the credentials must be specified. To address this issue, complete the prerequisite - [Google Auth Library](#google_auth)
